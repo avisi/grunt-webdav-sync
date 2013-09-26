@@ -1,3 +1,8 @@
+'use strict';
+/**
+ * Very simple webdav server
+ */
+
 var jsDAV = require("jsDAV/lib/jsdav");
 var jsDAV_Server = require("jsDAV/lib/DAV/server");
 var jsDAV_Locks_Backend_FS = require("jsDAV/lib/DAV/plugins/locks/fs");

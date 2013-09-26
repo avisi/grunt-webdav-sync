@@ -1,8 +1,8 @@
 /*
  * grunt-webdav-sync
- * https://github.com/mitchel/grunt-webdav-sync
+ * https://github.com/avisi/grunt-webdav-sync
  *
- * Copyright (c) 2013 Mitchel Kuijpers
+ * Copyright (c) 2013 Avisi B.V.
  * Licensed under the MIT license.
  */
 
