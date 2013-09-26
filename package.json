@@ -1,0 +1,44 @@
+{
+  "name": "grunt-webdav-sync",
+  "description": "Synchronizes a local folder to a remote webdav folder",
+  "version": "0.1.0",
+  "homepage": "https://github.com/mitchel/grunt-webdav-sync",
+  "author": {
+    "name": "Mitchel Kuijpers",
+    "email": "m.kuijpers@avisi.nl"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mitchel/grunt-webdav-sync.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mitchel/grunt-webdav-sync/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/mitchel/grunt-webdav-sync/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt": "~0.4.1",
+    "async": "~0.2.9",
+    "jsDAV": "~0.3.2"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.1"
+  },
+  "keywords": [
+    "gruntplugin"
+  ]
+}
