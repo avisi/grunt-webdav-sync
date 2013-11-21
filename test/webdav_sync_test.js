@@ -29,7 +29,7 @@ exports.webdav_sync = {
 
     default: function(test) {
         test.expect(1);
-        var expected = grunt.file.expand({cwd: 'test/assets/upload/'}, '**');
+        var expected = grunt.file.expand({cwd: 'test/assets/expected/'}, '**');
         var result = grunt.file.expand({cwd: 'tmp/assets/'}, '**');
         test.deepEqual(result, expected);
         test.done();
