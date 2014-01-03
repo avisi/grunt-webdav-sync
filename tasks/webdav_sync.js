@@ -157,7 +157,7 @@ module.exports = function(grunt) {
         files.forEach(function(file) {
             var key = getUploadKey(file, localPath);
             var parent = getParentUploadKey(key);
-            var remoteURL = url.resolve(remote_path, path.relative(localPath, file));
+            var remoteURL = url.resolve(remote_path, path.relative(localPath, file).replace(/\\/g, '/'));
             var isDir = grunt.file.isDir(file);
 
             if(isDir) {
