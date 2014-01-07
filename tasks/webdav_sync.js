@@ -47,6 +47,20 @@ var deleteFolderOnRemote = function(grunt, remoteURL, callback) {
         if(res.statusCode === 204 || res.statusCode === 404) { //created
             grunt.verbose.writeln("Folder: " + remoteURL + " deleted");
             callback(null, remoteURL);
+        } else if (res.statusCode === 207) { // res.body contains an XML WebDAV multistatus message; see http://tools.ietf.org/search/rfc2518#section-11
+            var matches = res.body.match("status>([^<]+)</"); // cheaper than parsing string using xml2js or similar            
+            var status = matches.length > 1 ? matches[1] : "HTTP/1.1 000 No status message returned in " + body;
+            // D:status element contains an HTTP response status line (see http://tools.ietf.org/search/rfc2616#section-6.1) like so:
+            // HTTP-Version SP Status-Code SP Reason-Phrase CRLF
+            matches = status.match("^[^\s]+ ([0-9]{3}) (.+)$");
+            var statusCode = parseInt(matches[1]);
+            var statusMessage = matches[2];
+            
+            if (statusCode === 404) { // we don't actually care if remote directories don't exist (yet)
+                callback(null, remoteURL);
+            } else {
+                callback({status: statusCode, message: statusMessage}, null);
+            }
         } else if (res.statusCode === 423) {
             callback({status: res.statusCode, message: "Could not remove the locked folder For url: " + remoteURL}, null);
         } else {
