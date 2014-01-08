@@ -200,7 +200,7 @@ module.exports = function(grunt) {
                 if(file.match(/\.(jpg|jpeg|png|gif|ico|psd)$/)){
                     options.encoding = null;
                 }
-                var buffer = grunt.file.read(file);
+                var buffer = grunt.file.read(file, options);
                 uploadTasks[key] = createTask(parent, function(callback) {
 
                     createFileOnRemote(grunt, remoteURL, buffer, callback);
