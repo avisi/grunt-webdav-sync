@@ -195,9 +195,9 @@ module.exports = function(grunt) {
                     
                 });
             } else {
-				var options = {};
+                var options = {};
                 //if it is a binary image file, skip encoding
-                if(file.match(/\.(jpg|jpeg|png|gif|ico|psd)$/)){
+                if(file.match(/\.(jpg|jpeg|png|gif|ico|psd|eot|woff|ttf|otf|jar|zip|swf|pdf)$/)){
                     options.encoding = null;
                 }
                 var buffer = grunt.file.read(file, options);
