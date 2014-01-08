@@ -72,12 +72,16 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+### 0.2.7
+
+ * Removed the hardcoded extensions to detect binary files and added isbinaryfile lib to detect this.
+ 
 ### 0.2.6
 
- * Fix issue with binary encoded files
+ * Fix issue with binary encoded files.
  
 ### 0.2.5
 
  * Added digest authentication.
  * Added support for windows paths.
- * Fixed a bug with deleting non-existing folders
+ * Fixed a bug with deleting non-existing folders.
