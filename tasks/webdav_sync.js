@@ -214,34 +214,6 @@ module.exports = function(grunt) {
             }
         });
 
-        // async.series([
-        //     function(callback) {
-        //         console.log(remote_path);
-        //         if(url.parse(remote_path).path !== '/') {
-        //             deleteFolderOnRemote(grunt, remote_path, callback);   
-        //         } else {
-        //             callback(null, remote_path);
-        //         }
-        //     },
-        //     function(callback) {
-        //         if(url.parse(remote_path).path !== '/') {
-        //             createFolderOnRemote(grunt, remote_path, callback);       
-        //         } else {
-        //             callback(null, remote_path);
-        //         }
-                
-        //     }
-        // ], function (err, results) {
-        //     async.auto(uploadTasks, function(err, results) {
-        //         if(err !== null) {
-        //             grunt.log.error(err.message);
-        //             done(false);
-        //         } else {
-        //             done();
-        //         }
-        //     })
-        // });
-
     });
 
 };
