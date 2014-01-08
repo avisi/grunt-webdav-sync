@@ -13,6 +13,7 @@ var path = require("path");
 var url = require('url');
 var async = require('async');
 var request = require('request');
+var isBinaryFileSync = require("isbinaryfile");
 
 var createRequestOptions = function(remoteURL, method) {
     var parsedUrl = url.parse(remoteURL);
@@ -197,12 +198,11 @@ module.exports = function(grunt) {
             } else {
                 var options = {};
                 //if it is a binary image file, skip encoding
-                if(file.match(/\.(jpg|jpeg|png|gif|ico|psd|eot|woff|ttf|otf|jar|zip|swf|pdf)$/)){
+                if(isBinaryFileSync(file)){
                     options.encoding = null;
                 }
                 var buffer = grunt.file.read(file, options);
                 uploadTasks[key] = createTask(parent, function(callback) {
-
                     createFileOnRemote(grunt, remoteURL, buffer, callback);
                 });
 

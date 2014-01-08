@@ -29,7 +29,8 @@
   },
   "dependencies": {
     "async": "~0.2.9",
-    "request": "~2.27.0"
+    "request": "~2.27.0",
+    "isbinaryfile": "~2.0.0"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "~0.6.0",
@@ -43,6 +44,8 @@
     "grunt": "~0.4.1"
   },
   "keywords": [
-    "webdav", "sync", "gruntplugin"
+    "webdav",
+    "sync",
+    "gruntplugin"
   ]
 }
