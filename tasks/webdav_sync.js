@@ -195,6 +195,11 @@ module.exports = function(grunt) {
                     
                 });
             } else {
+				var options = {};
+                //if it is a binary image file, skip encoding
+                if(file.match(/\.(jpg|jpeg|png|gif|ico|psd)$/)){
+                    options.encoding = null;
+                }
                 var buffer = grunt.file.read(file);
                 uploadTasks[key] = createTask(parent, function(callback) {
 
