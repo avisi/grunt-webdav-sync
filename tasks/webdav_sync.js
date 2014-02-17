@@ -66,7 +66,7 @@ var deleteFolderOnRemote = function(grunt, remoteURL, callback) {
         } else if (res.statusCode === 423) {
             callback({status: res.statusCode, message: "Could not remove the locked folder For url: " + remoteURL}, null);
         } else {
-            callback({status: res.statusCode, message: "Unknown error while deleting a dir gave statuscode: " + res.statusCode}, null);
+            callback({status: res.statusCode, message: "Unknown error while deleting \'" + remoteURL + "\' gave statuscode: " + res.statusCode}, null);
         }
     }).setMaxListeners(0);
 };
