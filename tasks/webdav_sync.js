@@ -18,7 +18,7 @@ var isBinaryFileSync = require("isbinaryfile");
 var createRequestOptions = function(remoteURL, method, configurationOptions) {
     var parsedUrl = url.parse(remoteURL);
     var auth = parsedUrl.auth;
-    console.log(configurationOptions);
+
     if(auth !== null) {
         var splittedString = auth.split(":");
         auth = {
@@ -66,14 +66,12 @@ var deleteFolderOnRemote = function(grunt, remoteURL, callback, configurationOpt
         } else if (res.statusCode === 423) {
             callback({status: res.statusCode, message: "Could not remove the locked folder For url: " + remoteURL}, null);
         } else if (res.statusCode === 401) {
-          request(options, function(error, res,body) {
+          request(options, function(error,res,body) {
             if(res.statusCode === 200 || res.statusCode === 204 || res.statusCode === 404) {
               callback(null, remoteURL);
             }
           });
-        }
-
-         else {
+        } else {
             callback({status: res.statusCode, message: "Unknown error while deleting \'" + remoteURL + "\' gave statuscode: " + res.statusCode}, null);
         }
     }).setMaxListeners(0);
@@ -89,8 +87,6 @@ var createFolderOnRemote = function(grunt, remoteURL, callback, configurationOpt
             grunt.verbose.writeln("Folder: " + remoteURL + " created");
             callback(null, remoteURL);
         } else if (res.statusCode === 401) {
-          // callback(null, remoteURL);
-            // callback({status: res.statusCode, message: "Resource requires authorization or authorization was denied. For url: " + remoteURL}, null);
             request(options, function(error, res,body) {
               if(res.statusCode === 201) {
                 callback(null, remoteURL);
@@ -124,14 +120,11 @@ var createFileOnRemote = function(grunt, remoteURL, data, callback, configuratio
             grunt.log.error("Got a unkown error trying to upload a file to: " + remoteURL);
             callback({message: "Error got a " + res.statusCode + " Trying to upload a file to: " + remoteURL}, null);
         } else if (res.statusCode === 401) {
-            grunt.log.error("Resource requires authorization or authorization was denied. For url:  " + remoteURL);
-            // callback(null, remoteURL);
-            // callback({status: res.statusCode, message: "Resource requires authorization or authorization was denied. For url: " + remoteURL}, null);
             request(options, function(error, res,body) {
               if(res.statusCode === 201) {
                 callback(null, remoteURL);
               }
-              });
+            });
         } else {
             grunt.verbose.writeln("File: " + remoteURL + " created");
             callback(null, remoteURL);

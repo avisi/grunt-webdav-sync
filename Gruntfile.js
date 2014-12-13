@@ -41,7 +41,7 @@ module.exports = function(grunt) {
             options: {
                 local_path: 'test/assets/upload/**',
                 remote_path: 'http://avisi:test@localhost:9001',
-                sendImmediately: false,
+                sendImmediately: true,
                 strictSSL: false
             }
         },
@@ -49,7 +49,7 @@ module.exports = function(grunt) {
             options: {
                 local_path: 'test/assets/upload2/**',
                 remote_path: 'http://avisi:test@localhost:9001/very/',
-                sendImmediately: false,
+                sendImmediately: true,
                 strictSSL: false
             }
         }
@@ -79,7 +79,7 @@ module.exports = function(grunt) {
       grunt.log.writeln("Starting test webdav server");
       var nodeDir = grunt.file.mkdir("tmp/assets");
 
-      jsDAV.debugMode = true;
+      // jsDAV.debugMode = true;
       var server = jsDAV.createServer({
           node: path.resolve("tmp/assets"),
           locksBackend: jsDAV_Locks_Backend_FS.new(path.resolve("tmp/assets")),
