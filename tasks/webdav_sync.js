@@ -71,6 +71,15 @@ var deleteFolderOnRemote = function(grunt, remoteURL, callback, configurationOpt
               callback(null, remoteURL);
             }
           });
+        } else if (res.statusCode === 301) {
+          options.uri = res.headers.location;
+          request(options, function(error,res,body) {
+            if(res.statusCode === 200 || res.statusCode === 204 || res.statusCode === 404) {
+              callback(null, remoteURL);
+            } else {
+              callback({status: res.statusCode, message: error}, null);
+            }
+          });
         } else {
             callback({status: res.statusCode, message: "Unknown error while deleting \'" + remoteURL + "\' gave statuscode: " + res.statusCode}, null);
         }
