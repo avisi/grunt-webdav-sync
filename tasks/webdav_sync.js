@@ -66,20 +66,20 @@ var deleteFolderOnRemote = function(grunt, remoteURL, callback, configurationOpt
         } else if (res.statusCode === 423) {
             callback({status: res.statusCode, message: "Could not remove the locked folder For url: " + remoteURL}, null);
         } else if (res.statusCode === 401) {
-          request(options, function(error,res,body) {
-            if(res.statusCode === 200 || res.statusCode === 204 || res.statusCode === 404) {
-              callback(null, remoteURL);
-            }
-          });
+            request(options, function(error,res,body) {
+                if(res.statusCode === 200 || res.statusCode === 204 || res.statusCode === 404) {
+                    callback(null, remoteURL);
+                }
+            });
         } else if (res.statusCode === 301) {
-          options.uri = res.headers.location;
-          request(options, function(error,res,body) {
-            if(res.statusCode === 200 || res.statusCode === 204 || res.statusCode === 404) {
-              callback(null, remoteURL);
-            } else {
-              callback({status: res.statusCode, message: error}, null);
-            }
-          });
+            options.uri = res.headers.location;
+            request(options, function(error,res,body) {
+                if(res.statusCode === 200 || res.statusCode === 204 || res.statusCode === 404) {
+                    callback(null, remoteURL);
+                } else {
+                    callback({status: res.statusCode, message: error}, null);
+                }
+            });
         } else {
             callback({status: res.statusCode, message: "Unknown error while deleting \'" + remoteURL + "\' gave statuscode: " + res.statusCode}, null);
         }
@@ -97,9 +97,9 @@ var createFolderOnRemote = function(grunt, remoteURL, callback, configurationOpt
             callback(null, remoteURL);
         } else if (res.statusCode === 401) {
             request(options, function(error, res,body) {
-              if(res.statusCode === 201) {
-                callback(null, remoteURL);
-              }
+                if(res.statusCode === 201) {
+                    callback(null, remoteURL);
+                }
             });
         } else if (res.statusCode === 403) {
             callback({status: res.statusCode, message: "The server does not allow collections to be created at the specified location, or the parent collection of the specified request URI exists but cannot accept members."}, null);
@@ -130,13 +130,16 @@ var createFileOnRemote = function(grunt, remoteURL, data, callback, configuratio
             callback({message: "Error got a " + res.statusCode + " Trying to upload a file to: " + remoteURL}, null);
         } else if (res.statusCode === 401) {
             request(options, function(error, res,body) {
-              if(res.statusCode === 201) {
-                callback(null, remoteURL);
-              }
+                if(res.statusCode === 201) {
+                    callback(null, remoteURL);
+                }
             });
-        } else {
+        } else if (Math.floor(res.statusCode / 100) === 2) {
             grunt.verbose.writeln("File: " + remoteURL + " created");
             callback(null, remoteURL);
+        } else {
+            grunt.log.error("Got a unkown error trying to upload a file to: " + remoteURL);
+            callback({message: "Error got a " + res.statusCode + " Trying to upload a file to: " + remoteURL}, null);
         }
     });
 
@@ -193,42 +196,31 @@ module.exports = function(grunt) {
         grunt.log.ok('Found ' + files.length + ' files, Start uploading files to ' + options.remote_path);
         grunt.verbose.writeln(grunt.log.wordlist(files));
 
-        var uploadTasks = {};
+        var dirTasks = [];
+        var fileTasks = [];
 
         files.forEach(function(file) {
-            var key = getUploadKey(file, localPath);
-            var parent = getParentUploadKey(key);
             var remoteURL = url.resolve(remote_path, path.relative(localPath, file).replace(/\\/g, '/'));
             var isDir = grunt.file.isDir(file);
 
             if(isDir) {
                 // Remove existing dir and create a new one
-                uploadTasks[key] = createTask(parent, function(callback) {
-                    async.series([
-                        function(taskCallback) {
-                            deleteFolderOnRemote(grunt, remoteURL, taskCallback, configurationOptions);
-                        },
-                        function(taskCallback) {
-                            createFolderOnRemote(grunt, remoteURL, taskCallback, configurationOptions);
-                        }
-                    ], function (err, results) {
-                        if(err !== null) {
-                            grunt.log.error(err.message);
-                            callback(err);
-                        } else {
-                            callback(null, remoteURL);
-                        }
-                    });
-
-                });
+                dirTasks = dirTasks.concat([
+                    function(taskCallback) {
+                        deleteFolderOnRemote(grunt, remoteURL, taskCallback, configurationOptions);
+                    },
+                    function(taskCallback) {
+                        createFolderOnRemote(grunt, remoteURL, taskCallback, configurationOptions);
+                    }
+                ]);
             } else {
                 var options = {};
                 //if it is a binary image file, skip encoding
                 if(isBinaryFileSync(file)){
                     options.encoding = null;
                 }
-                var buffer = grunt.file.read(file, options);
-                uploadTasks[key] = createTask(parent, function(callback) {
+                fileTasks.push(function(callback) {
+                    var buffer = grunt.file.read(file, options);
                     createFileOnRemote(grunt, remoteURL, buffer, callback, configurationOptions);
                 });
 
@@ -236,7 +228,7 @@ module.exports = function(grunt) {
         });
 
 
-        async.auto(uploadTasks, function(err, results) {
+        async.series(dirTasks.concat(fileTasks), function(err, results) {
             if(err !== null) {
                 grunt.log.error(err.message);
                 done(false);
