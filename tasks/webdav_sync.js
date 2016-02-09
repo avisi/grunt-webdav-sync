@@ -178,8 +178,12 @@ module.exports = function(grunt) {
 
         var files = grunt.file.expand(options.local_path);
 
-        var localPath = files[0];
+      var localPath = files[0];
+      if(grunt.file.isFile(localPath)) {
+        localPath = path.dirname(localPath);
+      } else {
         files.splice(0, 1); // the first file is always the specified dir we remove it.
+      }
 
         grunt.log.ok('Found ' + files.length + ' files, Start uploading files to ' + options.remote_path);
         grunt.verbose.writeln(grunt.log.wordlist(files));

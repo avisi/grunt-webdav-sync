@@ -37,27 +37,35 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     webdav_sync: {
-        default: {
-            options: {
-                local_path: 'test/assets/upload/**',
-                remote_path: 'http://avisi:test@localhost:9001',
-                sendImmediately: true,
-                strictSSL: false
-            }
-        },
-        other: {
-            options: {
-                local_path: 'test/assets/upload2/**',
-                remote_path: 'http://avisi:test@localhost:9001/very/',
-                sendImmediately: true,
-                strictSSL: false
-            }
+      default: {
+        options: {
+          local_path: 'test/assets/upload/**',
+          remote_path: 'http://avisi:test@localhost:9001',
+          sendImmediately: true,
+          strictSSL: false
         }
+      },
+      other: {
+        options: {
+          local_path: 'test/assets/upload2/**',
+          remote_path: 'http://avisi:test@localhost:9001/very/',
+          sendImmediately: true,
+          strictSSL: false
+        }
+      },
+      single_file: {
+        options: {
+          local_path: 'test/assets/single_file/*',
+          remote_path: 'http://avisi:test@localhost:9001/',
+          sendImmediately: true,
+          strictSSL: false
+        }
+      }
     },
 
-  start_webdav_server: {
+    start_webdav_server: {
       default: {}
-  },
+    },
 
     // Unit tests.
     nodeunit: {
@@ -75,22 +83,22 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
   grunt.registerMultiTask('start_webdav_server', 'Simple webdav server for testing', function () {
-      var done = this.async();
-      grunt.log.writeln("Starting test webdav server");
-      var nodeDir = grunt.file.mkdir("tmp/assets");
+    var done = this.async();
+    grunt.log.writeln("Starting test webdav server");
+    var nodeDir = grunt.file.mkdir("tmp/assets");
 
-      // jsDAV.debugMode = true;
-      var server = jsDAV.createServer({
-          node: path.resolve("tmp/assets"),
-          locksBackend: jsDAV_Locks_Backend_FS.new(path.resolve("tmp/assets")),
-          // authBackend: jsDAV_Auth_Backend_File.new(path.resolve("htdigest")),
-          // realm: "avisi"
-      }, 9001);
+    // jsDAV.debugMode = true;
+    var server = jsDAV.createServer({
+      node: path.resolve("tmp/assets"),
+      locksBackend: jsDAV_Locks_Backend_FS.new(path.resolve("tmp/assets")),
+      // authBackend: jsDAV_Auth_Backend_File.new(path.resolve("htdigest")),
+      // realm: "avisi"
+    }, 9001);
 
-      setTimeout(function(){
-          grunt.log.ok("Hopefully the server is started..");
-          done();
-      }, 3000);
+    setTimeout(function(){
+      grunt.log.ok("Hopefully the server is started..");
+      done();
+    }, 3000);
 
   });
 
