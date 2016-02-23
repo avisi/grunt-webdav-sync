@@ -88,6 +88,9 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 ## Release History
 
 ### 0.2.9
+ * Add support for grunt 1.0
+
+### 0.2.9
  * Bugfix: fixes #18
  
 ### 0.2.8
